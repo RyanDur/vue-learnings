@@ -1,13 +1,10 @@
 <script src="./Main.js"></script>
-<style src="./Style.scss"></style>
+<style lang="scss" src="./Style.scss"></style>
 
 <template>
-    <div>
+    <div class="container">
         <p>Completed Tasks: {{ completed }}</p>
         <p>Pending Tasks: {{ pending }}</p>
-
-        <input id="todos" type="checkbox">
-        <label id="todo-checkbox" for="todos"></label>
         <todo v-for="todo in todos" :key="todo.id" v-bind:todo="todo"></todo>
     </div>
 </template>

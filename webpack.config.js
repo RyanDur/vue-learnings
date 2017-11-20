@@ -26,33 +26,19 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.css$/,
-                use: [
-                    'style-loader',
-                    'css-loader'
-                ]
-            }, {
-                test: /\.scss$/,
-                use: "sass-loader"
-            },
-            {
                 test: /\.(png|svg|jpg|gif)$/,
                 use: [
                     'file-loader'
                 ]
             },
             {
-                test: /\.js$/,
-                exclude: /(node_modules)/,
-                loader: "babel-loader",
-                query: {
-                    presets: ['@babel/preset-env']
-                }
-            },
-            {
                 test: /\.vue$/,
                 loader: 'vue-loader',
                 options: {
+                    postcss: [
+                        require('postcss-cssnext')(),
+                        require('postcss-clean')()
+                    ],
                     loaders: {
                         css: ExtractTextPlugin.extract({
                             use: 'css-loader',

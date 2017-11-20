@@ -1,6 +1,6 @@
 import Todo from '../Todo/Component.vue';
 
-export default (() => {
+export default (function () {
 
     const countDone = (isDone, todos) =>
         todos.filter(todo => todo.done === isDone).length;
