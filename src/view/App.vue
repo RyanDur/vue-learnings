@@ -1,8 +1,9 @@
 <template>
     <div>
-        <todo-list v-bind:todos="todos"></todo-list>
+        <main-header></main-header>
+        <!--<game-menu></game-menu>-->
     </div>
 </template>
 
 <script type="text/javascript" src="./Main.js"></script>
-<style src="./Style.scss"></style>
+<style lang="scss" src="./Style.scss" module></style>

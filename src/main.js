@@ -4,5 +4,5 @@ import App from './view/App.vue';
 new Vue({
     el: '#app',
     template: '<App/>',
-    components: { App },
+    components: { App }
 });

@@ -3,6 +3,7 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 
 const paths = {
     DIST: path.resolve(__dirname, 'dist'),
@@ -13,12 +14,23 @@ module.exports = {
     entry: path.join(paths.SRC, 'main.js'),
     output: {
         path: paths.DIST,
-        filename: '[name].bundle.js'
+        filename: '[name].js'
     },
     plugins: [
         new CleanWebpackPlugin(['dist']),
-        new ExtractTextPlugin("style.css"),
-        new UglifyJSPlugin(),
+        new ExtractTextPlugin('[name].css'),
+        new OptimizeCssAssetsPlugin({
+            assetNameRegExp: /\.css$/,
+            cssProcessorOptions: {discardComments: {removeAll: true}}
+        }),
+        new UglifyJSPlugin({
+            uglifyOptions: {
+                compress: {warnings: false},
+                include: /\.js$/
+            },
+            extractComments: true,
+            sourceMap: true
+        }),
         new HtmlWebpackPlugin({
             template: path.join(paths.SRC, 'index.html'),
         })
@@ -36,18 +48,20 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     postcss: [
-                        require('postcss-cssnext')(),
-                        require('postcss-clean')()
+                        require('postcss-cssnext')()
                     ],
                     loaders: {
-                        css: ExtractTextPlugin.extract({
-                            use: 'css-loader',
+                        scss: ExtractTextPlugin.extract({
+                            use: 'css-loader!sass-loader',
+                            fallback: 'vue-style-loader'
+                        }),
+                        sass: ExtractTextPlugin.extract({
+                            use: 'css-loader!sass-loader?indentedSyntax',
                             fallback: 'vue-style-loader'
                         })
                     }
                 }
             }
-
         ]
     },
     resolve: {

@@ -1,11 +1,10 @@
-import TodoList from './TodoList/Component.vue';
+import Header from './Header/Component.vue';
 
 export default {
     name: 'app',
     components: {
-        TodoList
+        'main-header': Header
     },
-    // data function avails data to the template
     data() {
         return {
             todos: [{

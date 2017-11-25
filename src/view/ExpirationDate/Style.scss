@@ -1,0 +1,15 @@
+#expiration-date {
+  display: flex;
+  justify-content: space-evenly;
+  border: 1px solid black;
+  width: 100%;
+
+  #month,#year {
+    border: none;
+    width: 20%;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+}
