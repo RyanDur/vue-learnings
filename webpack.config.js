@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
@@ -25,7 +26,9 @@ module.exports = {
         }),
         new UglifyJSPlugin({
             uglifyOptions: {
-                compress: {warnings: false},
+                compress: {
+                    warnings: false
+                },
                 include: /\.js$/
             },
             extractComments: true,
@@ -33,13 +36,55 @@ module.exports = {
         }),
         new HtmlWebpackPlugin({
             template: path.join(paths.SRC, 'index.html'),
-        })
+            cache: false,
+            minify: {
+                html5: true,
+                collapseWhitespace: true,
+                removeAttributeQuotes: true,
+                removeComments: true,
+                removeEmptyAttributes: true,
+                removeOptionalTags: true,
+                removeRedundantAttributes: true,
+                removeScriptTypeAttributes: true,
+                removeStyleLinkTypeAttributese: true,
+                useShortDoctype: true
+            }
+        }),
+        new webpack.optimize.AggressiveMergingPlugin()
     ],
     module: {
         rules: [
             {
-                test: /\.(png|svg|jpg|gif)$/,
+                test: /.*\.(gif|png|jpe?g|svg)$/i,
                 use: [
+                    {
+                        loader: 'image-webpack-loader',
+                        options: {
+                            mozjpeg: {
+                                enabled: false
+                            },
+                            optipng: {
+                                enabled: false
+                            },
+                            pngquant: {
+                                quality: '65-90',
+                                speed: 4
+                            },
+                            gifsicle: {
+                                enabled: false
+                            },
+                            svgo: {
+                                plugins: [
+                                    {removeTitle: true},
+                                    {convertColors: {shorthex: false}},
+                                    {convertPathData: false}
+                                ]
+                            },
+                            webp: {
+                                quality: 75
+                            }
+                        },
+                    },
                     'file-loader'
                 ]
             },
@@ -48,7 +93,10 @@ module.exports = {
                 loader: 'vue-loader',
                 options: {
                     postcss: [
-                        require('postcss-cssnext')()
+                        require('postcss-cssnext')({
+                            browsers: ['last 2 versions', 'ie >= 9'],
+                            compress: true
+                        })
                     ],
                     loaders: {
                         scss: ExtractTextPlugin.extract({
@@ -63,6 +111,10 @@ module.exports = {
                 }
             }
         ]
+    },
+    devServer: {
+        contentBase: paths.DIST,
+        compress: true
     },
     resolve: {
         alias: {
