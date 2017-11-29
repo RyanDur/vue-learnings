@@ -1,7 +1,6 @@
 <template>
     <div>
         <main-header></main-header>
-        <!--<game-menu></game-menu>-->
     </div>
 </template>
 

@@ -85,8 +85,21 @@ module.exports = {
                             }
                         },
                     },
-                    'file-loader'
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: '[name].[ext]?[hash]'
+                        }
+                    }
                 ]
+            },
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                exclude: /node_modules/,
+                options: {
+                    presets: ['@babel/preset-env']
+                }
             },
             {
                 test: /\.vue$/,
@@ -112,13 +125,17 @@ module.exports = {
             }
         ]
     },
-    devServer: {
-        contentBase: paths.DIST,
-        compress: true
-    },
     resolve: {
         alias: {
             'vue$': 'vue/dist/vue.esm.js'
         }
-    }
+    },
+    devServer: {
+        historyApiFallback: true,
+        noInfo: true
+    },
+    performance: {
+        hints: false
+    },
+    devtool: '#eval-source-map'
 };
