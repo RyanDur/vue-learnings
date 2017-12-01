@@ -5,11 +5,43 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const merge = require('webpack-merge');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 module.exports = function (paths) {
-
     return merge(base(paths), {
+        module: {
+            rules: [
+                {
+                    test: /\.vue$/,
+                    loader: 'vue-loader',
+                    options: {
+                        postcss: [
+                            require('postcss-cssnext')({
+                                browsers: ['last 2 versions', 'ie >= 9'],
+                                compress: true
+                            })
+                        ],
+                        loaders: {
+                            scss: ExtractTextPlugin.extract({
+                                use: [{
+                                    loader: "css-loader",
+                                    options: {
+                                        sourceMap: false
+                                    }
+                                }, {
+                                    loader: "sass-loader",
+                                    options: {
+                                        sourceMap: false
+                                    }
+                                }],
+                                fallback: 'vue-style-loader'
+                            })
+                        }
+                    }
+                }
+            ]
+        },
         plugins: [
             new OptimizeCssAssetsPlugin({
                 assetNameRegExp: /\.css$/,

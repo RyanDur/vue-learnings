@@ -19,35 +19,27 @@ module.exports = function (paths) {
                         {
                             loader: 'image-webpack-loader',
                             options: {
-                                mozjpeg: {
-                                    enabled: false
-                                },
-                                optipng: {
-                                    enabled: false
-                                },
+                                mozjpeg: {enabled: false},
+                                optipng: {enabled: false},
+                                gifsicle: {enabled: false},
                                 pngquant: {
                                     quality: '65-90',
                                     speed: 4
                                 },
-                                gifsicle: {
-                                    enabled: false
-                                },
                                 svgo: {
                                     plugins: [
                                         {removeTitle: true},
-                                        {convertColors: {shorthex: false}},
-                                        {convertPathData: false}
+                                        {convertColors: {shorthex: true}},
+                                        {convertPathData: true}
                                     ]
                                 },
-                                webp: {
-                                    quality: 75
-                                }
+                                webp: {quality: 75}
                             },
                         },
                         {
                             loader: 'file-loader',
                             options: {
-                                name: '[name].[ext]?[hash]'
+                                name: '[name]-[hash].[ext]'
                             }
                         }
                     ]
@@ -59,28 +51,6 @@ module.exports = function (paths) {
                     options: {
                         presets: ['@babel/preset-env']
                     }
-                },
-                {
-                    test: /\.vue$/,
-                    loader: 'vue-loader',
-                    options: {
-                        postcss: [
-                            require('postcss-cssnext')({
-                                browsers: ['last 2 versions', 'ie >= 9'],
-                                compress: true
-                            })
-                        ],
-                        loaders: {
-                            scss: ExtractTextPlugin.extract({
-                                use: 'css-loader!sass-loader',
-                                fallback: 'vue-style-loader'
-                            }),
-                            sass: ExtractTextPlugin.extract({
-                                use: 'css-loader!sass-loader?indentedSyntax',
-                                fallback: 'vue-style-loader'
-                            })
-                        }
-                    }
                 }
             ]
         },
@@ -91,15 +61,15 @@ module.exports = function (paths) {
             extensions: ['.js']
         },
         plugins: [
-            new ExtractTextPlugin('[name].css'),
-            new CleanWebpackPlugin(['dist']),
+            new CleanWebpackPlugin(['dist'], {root: paths.ROOT}),
             new HtmlWebpackPlugin({
                 filename: "index.html",
                 template: path.join(paths.SRC, 'index.html'),
                 minify: {
                     removeComments: true
                 }
-            })
+            }),
+            new ExtractTextPlugin('[name].css')
         ]
     }
 };
