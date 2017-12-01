@@ -3,7 +3,7 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
-module.exports = function (paths) {
+module.exports = (paths, {development = false}) => {
     return {
         entry: path.join(paths.SRC, 'main.js'),
         output: {
@@ -50,6 +50,34 @@ module.exports = function (paths) {
                     exclude: /node_modules/,
                     options: {
                         presets: ['@babel/preset-env']
+                    }
+                },
+                {
+                    test: /\.vue$/,
+                    loader: 'vue-loader',
+                    options: {
+                        postcss: [
+                            require('postcss-cssnext')({
+                                browsers: ['last 2 versions', 'ie >= 9'],
+                                compress: true
+                            })
+                        ],
+                        loaders: {
+                            scss: ExtractTextPlugin.extract({
+                                use: [{
+                                    loader: "css-loader",
+                                    options: {
+                                        sourceMap: development
+                                    }
+                                }, {
+                                    loader: "sass-loader",
+                                    options: {
+                                        sourceMap: development
+                                    }
+                                }],
+                                fallback: 'vue-style-loader'
+                            })
+                        }
                     }
                 }
             ]

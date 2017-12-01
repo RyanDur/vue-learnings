@@ -5,43 +5,10 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const merge = require('webpack-merge');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
-module.exports = function (paths) {
-    return merge(base(paths), {
-        module: {
-            rules: [
-                {
-                    test: /\.vue$/,
-                    loader: 'vue-loader',
-                    options: {
-                        postcss: [
-                            require('postcss-cssnext')({
-                                browsers: ['last 2 versions', 'ie >= 9'],
-                                compress: true
-                            })
-                        ],
-                        loaders: {
-                            scss: ExtractTextPlugin.extract({
-                                use: [{
-                                    loader: "css-loader",
-                                    options: {
-                                        sourceMap: false
-                                    }
-                                }, {
-                                    loader: "sass-loader",
-                                    options: {
-                                        sourceMap: false
-                                    }
-                                }],
-                                fallback: 'vue-style-loader'
-                            })
-                        }
-                    }
-                }
-            ]
-        },
+module.exports = (paths, env) =>
+    merge(base(paths, env), {
         plugins: [
             new OptimizeCssAssetsPlugin({
                 assetNameRegExp: /\.css$/,
@@ -63,15 +30,17 @@ module.exports = function (paths) {
                 minify: {
                     html5: true,
                     collapseWhitespace: true,
-                    removeAttributeQuotes: true,
+                    decodeEntities: true,
+                    keepClosingSlash: true,
+                    quoteCharacter: '"',
                     removeComments: true,
-                    removeEmptyAttributes: true,
-                    removeOptionalTags: true,
                     removeRedundantAttributes: true,
                     removeScriptTypeAttributes: true,
                     removeStyleLinkTypeAttributese: true,
+                    removeOptionalTags: true,
                     useShortDoctype: true
-                }
+                },
+                xhtml: true
             }),
             new webpack.DefinePlugin({
                 "process.env": {
@@ -80,5 +49,7 @@ module.exports = function (paths) {
             }),
             new webpack.optimize.AggressiveMergingPlugin()
         ],
-    })
-};
+        performance: {
+            hints: "warning"
+        }
+    });

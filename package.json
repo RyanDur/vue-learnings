@@ -48,10 +48,10 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --hot --color",
-    "prod": "cross-env NODE_ENV=production webpack",
-    "build:dev": "cross-env NODE_ENV=development webpack",
-    "build:prod": "cross-env NODE_ENV=production webpack"
+    "dev": "webpack-dev-server --env.development",
+    "prod": "webpack-dev-server --env.production  --inline=false",
+    "build:dev": "webpack --env.development",
+    "build:prod": "webpack --env.production"
   },
   "keywords": [],
   "author": "",
