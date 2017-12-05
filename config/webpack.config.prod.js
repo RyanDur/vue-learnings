@@ -5,6 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const merge = require('webpack-merge');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CompressionPlugin = require("compression-webpack-plugin");
 
 
 module.exports = (paths, env) =>
@@ -17,7 +18,13 @@ module.exports = (paths, env) =>
             new UglifyJSPlugin({
                 uglifyOptions: {
                     compress: {
-                        warnings: false
+                        sequences: true,
+                        booleans: true,
+                        loops: true,
+                        unused: true,
+                        warnings: false,
+                        drop_console: true,
+                        unsafe: true
                     },
                     include: /\.js$/
                 },
@@ -32,12 +39,7 @@ module.exports = (paths, env) =>
                     collapseWhitespace: true,
                     decodeEntities: true,
                     keepClosingSlash: true,
-                    quoteCharacter: '"',
                     removeComments: true,
-                    removeRedundantAttributes: true,
-                    removeScriptTypeAttributes: true,
-                    removeStyleLinkTypeAttributese: true,
-                    removeOptionalTags: true,
                     useShortDoctype: true
                 },
                 xhtml: true
@@ -47,7 +49,13 @@ module.exports = (paths, env) =>
                     "NODE_ENV": JSON.stringify("production")
                 }
             }),
-            new webpack.optimize.AggressiveMergingPlugin()
+            new webpack.optimize.AggressiveMergingPlugin(),
+            new CompressionPlugin({
+                test: /\.js$|\.css$|\.html$/,
+                algorithm: 'gzip',
+                asset: '[path].gz[query]',
+                deleteOriginalAssets: true
+            })
         ],
         performance: {
             hints: "warning"
