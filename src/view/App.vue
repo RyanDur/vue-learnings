@@ -1,6 +1,7 @@
 <template>
     <div>
         <main-header></main-header>
+        <main-menu></main-menu>
     </div>
 </template>
 
