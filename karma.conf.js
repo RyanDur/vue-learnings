@@ -1,4 +1,4 @@
-const webpackConfig = require('./webpack.config')({production: true});
+const webpackConfig = require('./webpack.config')({development: true});
 
 module.exports = function (config) {
   config.set({
@@ -30,7 +30,7 @@ module.exports = function (config) {
     logLevel: config.LOG_WARN, //config.LOG_DISABLE, config.LOG_ERROR, config.LOG_INFO, config.LOG_DEBUG
 
     //list of frameworks you want to use, only jasmine is installed automatically
-    frameworks: ['jasmine'],
+    frameworks: ['jasmine-ajax','jasmine'],
     //list of browsers to launch and capture
     browsers: ['Chrome'/*,'PhantomJS','Firefox','Edge','ChromeCanary','Opera','IE','Safari'*/],
     //list of reporters to use
@@ -93,7 +93,8 @@ module.exports = function (config) {
       'karma-jasmine',
       'karma-mocha-reporter',
       'karma-jasmine-html-reporter',
-      'karma-chrome-launcher'
+      'karma-chrome-launcher',
+      'karma-jasmine-ajax'
     ]
   });
 };

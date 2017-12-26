@@ -10,7 +10,6 @@
   "license": "ISC",
   "devDependencies": {
     "babel-preset-env": "^1.6.1",
-    "cors": "^2.8.4",
     "jasmine": "^2.8.0",
     "jasmine-console-reporter": "^2.0.1",
     "jasmine-promise-wrapper": "0.0.3",

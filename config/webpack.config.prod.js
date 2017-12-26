@@ -46,8 +46,5 @@ module.exports = (paths, env) => merge(base(paths, env), {
       }
     }),
     new webpack.optimize.AggressiveMergingPlugin()
-  ],
-  performance: {
-    hints: "warning"
-  }
+  ]
 });
